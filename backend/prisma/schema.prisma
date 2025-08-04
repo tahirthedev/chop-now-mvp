@@ -1,0 +1,212 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum Role {
+  CUSTOMER
+  RESTAURANT_OWNER
+  RIDER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY_FOR_PICKUP
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum DeliveryStatus {
+  ASSIGNED
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// Models
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String
+  name        String
+  phone       String?
+  role        Role     @default(CUSTOMER)
+  isActive    Boolean  @default(true)
+  avatar      String?
+  dateOfBirth DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  ownedRestaurants Restaurant[]
+  orders           Order[]
+  reviews          Review[]
+  deliveries       Delivery[]
+
+  @@map("users")
+}
+
+model Restaurant {
+  id           String  @id @default(uuid())
+  name         String
+  description  String?
+  address      String
+  phone        String
+  imageUrl     String?
+  latitude     Float?
+  longitude    Float?
+  isActive     Boolean @default(true)
+  rating       Float   @default(0)
+  deliveryFee  Float   @default(0)
+  minOrder     Float   @default(0)
+  deliveryTime Int     @default(30) // in minutes
+  isOpen       Boolean @default(true)
+  openTime     String? // "09:00"
+  closeTime    String? // "22:00"
+  ownerId      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  owner     User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  menuItems MenuItem[]
+  orders    Order[]
+  reviews   Review[]
+
+  @@map("restaurants")
+}
+
+model MenuItem {
+  id           String  @id @default(uuid())
+  name         String
+  description  String?
+  price        Float
+  imageUrl     String?
+  category     String
+  isAvailable  Boolean @default(true)
+  preparationTime Int  @default(15) // in minutes
+  restaurantId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  restaurant Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@map("menu_items")
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique
+  status          OrderStatus @default(PENDING)
+  subtotal        Float
+  deliveryFee     Float
+  tax             Float
+  total           Float
+  deliveryAddress String
+  deliveryNotes   String?
+  estimatedDeliveryTime DateTime?
+  customerId      String
+  restaurantId    String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  customer   User        @relation(fields: [customerId], references: [id])
+  restaurant Restaurant  @relation(fields: [restaurantId], references: [id])
+  orderItems OrderItem[]
+  delivery   Delivery?
+  payment    Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String @id @default(uuid())
+  quantity   Int
+  price      Float
+  notes      String?
+  orderId    String
+  menuItemId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_items")
+}
+
+model Delivery {
+  id               String         @id @default(uuid())
+  status           DeliveryStatus @default(ASSIGNED)
+  pickupTime       DateTime?
+  deliveryTime     DateTime?
+  riderLatitude    Float?
+  riderLongitude   Float?
+  estimatedArrival DateTime?
+  orderId          String         @unique
+  riderId          String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  rider User? @relation(fields: [riderId], references: [id])
+
+  @@map("deliveries")
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  amount        Float
+  status        PaymentStatus @default(PENDING)
+  paymentMethod String        // "card", "cash", "digital_wallet"
+  transactionId String?
+  orderId       String        @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Review {
+  id           String @id @default(uuid())
+  rating       Int    // 1-5 stars
+  comment      String?
+  userId       String
+  restaurantId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user       User       @relation(fields: [userId], references: [id])
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, restaurantId]) // One review per user per restaurant
+  @@map("reviews")
+}
