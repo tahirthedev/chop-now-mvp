@@ -51,7 +51,7 @@ export default function LoginForm({ redirectTo = '/dashboard', className = '' }:
           break;
         case 'CUSTOMER':
         default:
-          redirectPath = '/customer/dashboard';
+          redirectPath = '/'; // Redirect customers to the main homepage
           break;
       }
       

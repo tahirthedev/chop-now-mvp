@@ -7,7 +7,7 @@ import { ArrowRightIcon, ShoppingBagIcon, TruckIcon, ClockIcon } from '@heroicon
 import { useAuth } from '@/lib/hooks/useAuth';
 
 export default function HomePage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function HomePage() {
           break;
         case 'CUSTOMER':
         default:
-          router.replace('/customer/dashboard');
+          // Customers stay on the homepage - no redirect needed
           break;
       }
     }
@@ -41,8 +41,8 @@ export default function HomePage() {
     );
   }
 
-  // Show loading while redirecting authenticated users
-  if (isAuthenticated) {
+  // Show loading while redirecting authenticated users (except customers)
+  if (isAuthenticated && user?.role && user.role !== 'CUSTOMER') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -67,18 +67,32 @@ export default function HomePage() {
               <Link href="#how-it-works" className="text-gray-600 hover:text-blue-500 transition-colors">
                 How It Works
               </Link>
-              <Link 
-                href="/auth/login" 
-                className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link 
-                href="/auth/register" 
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-              >
-                Get Started
-              </Link>
+              {isAuthenticated && user?.role === 'CUSTOMER' ? (
+                <>
+                  <span className="text-gray-600">Welcome, {user.name || user.email}</span>
+                  <button 
+                    onClick={logout}
+                    className="px-4 py-2 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link 
+                    href="/auth/login" 
+                    className="px-4 py-2 border border-blue-500 text-blue-500 rounded-md hover:bg-blue-50 transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                  <Link 
+                    href="/auth/register" 
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                  >
+                    Get Started
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         </div>
@@ -98,19 +112,39 @@ export default function HomePage() {
                 Fresh, fast, and always delicious.
               </p>
               <div className="mt-8 flex justify-center space-x-4">
-                <Link
-                  href="/auth/register"
-                  className="flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                >
-                  Order Now
-                  <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </Link>
-                <Link
-                  href="/auth/login"
-                  className="flex items-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-                >
-                  Sign In
-                </Link>
+                {isAuthenticated && user?.role === 'CUSTOMER' ? (
+                  <>
+                    <Link
+                      href="#features"
+                      className="flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                    >
+                      Browse Restaurants
+                      <ArrowRightIcon className="ml-2 h-5 w-5" />
+                    </Link>
+                    <Link
+                      href="#how-it-works"
+                      className="flex items-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    >
+                      Learn More
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/register"
+                      className="flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                    >
+                      Order Now
+                      <ArrowRightIcon className="ml-2 h-5 w-5" />
+                    </Link>
+                    <Link
+                      href="/auth/login"
+                      className="flex items-center px-8 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    >
+                      Sign In
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -205,21 +239,43 @@ export default function HomePage() {
         {/* CTA Section */}
         <section className="py-20 bg-blue-600">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-extrabold text-white">
-              Ready to get started?
-            </h2>
-            <p className="mt-4 text-xl text-blue-100">
-              Join thousands of satisfied customers who trust ChopNow for their food delivery needs.
-            </p>
-            <div className="mt-8">
-              <Link
-                href="/auth/register"
-                className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 transition-colors"
-              >
-                Start Ordering Today
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
-              </Link>
-            </div>
+            {isAuthenticated && user?.role === 'CUSTOMER' ? (
+              <>
+                <h2 className="text-3xl font-extrabold text-white">
+                  Ready to order?
+                </h2>
+                <p className="mt-4 text-xl text-blue-100">
+                  Browse our amazing selection of restaurants and start ordering your favorite meals.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    href="#features"
+                    className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    Browse Restaurants
+                    <ArrowRightIcon className="ml-2 h-5 w-5" />
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2 className="text-3xl font-extrabold text-white">
+                  Ready to get started?
+                </h2>
+                <p className="mt-4 text-xl text-blue-100">
+                  Join thousands of satisfied customers who trust ChopNow for their food delivery needs.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    href="/auth/register"
+                    className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    Start Ordering Today
+                    <ArrowRightIcon className="ml-2 h-5 w-5" />
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </section>
       </main>
