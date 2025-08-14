@@ -1,303 +1,254 @@
-# ChopNow - Food Delivery Application
+# 🍽️ ChopNow - African Food Delivery Platform
 
-A complete food delivery web application with customer, restaurant, rider, and admin dashboards.
+ChopNow is a comprehensive food delivery platform specializing in authentic African cuisine. The platform connects food lovers with the best African restaurants, offering a seamless ordering experience with real-time tracking and delivery.
 
-## 🏗️ Architecture
+## 🌟 Features
 
-- **Frontend**: Next.js 14+ with TypeScript & Tailwind CSS
-- **Backend**: Node.js with Express.js & TypeScript
+### 🎨 **African-Themed Design**
+- Vibrant orange and amber color scheme inspired by African heritage
+- Modern, responsive UI built with shadcn/ui components
+- Intuitive navigation with cultural elements
+
+### 🏪 **Multi-Restaurant Platform**
+- **Nigerian Cuisine**: Jollof rice, Egusi soup, Suya, Pounded yam
+- **Ethiopian Delights**: Doro wat, Injera, Vegetarian combinations, Kitfo
+- **Ghanaian Specialties**: Banku with tilapia, Kelewele, Waakye
+- **Moroccan Flavors**: Tagines, Couscous royal, Pastilla
+- **Kenyan Dishes**: Nyama choma, Ugali, Sukuma wiki, Samosas
+- **South African Braai**: Boerewors, Bobotie, Biltong platters
+
+### 👤 **Multi-Role System**
+- **Customers**: Browse, order, track deliveries, rate restaurants
+- **Restaurant Owners**: Manage menus, process orders, update availability
+- **Delivery Riders**: Accept deliveries, track routes, update status
+- **Admins**: Oversee platform operations, manage users, analytics
+
+### 🚀 **Advanced Features**
+- **Real-time Order Tracking**: Live updates via Socket.IO
+- **Location-based Search**: Find restaurants by distance and location
+- **Advanced Filtering**: Search by cuisine, price, ratings, delivery time
+- **Payment Integration**: Secure payment processing
+- **Review System**: Customer ratings and feedback
+- **Distance Calculation**: Haversine formula for accurate delivery estimates
+
+## 🛠️ Technology Stack
+
+### **Frontend**
+- **Framework**: Next.js 14.2.30 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Components**: shadcn/ui
+- **State Management**: Zustand for auth state
+- **API Client**: Axios with interceptors
+- **Authentication**: JWT-based auth
+
+### **Backend**
+- **Framework**: Express.js with TypeScript
 - **Database**: PostgreSQL with Prisma ORM
-- **Cache**: Redis for sessions and real-time data
-- **Authentication**: JWT tokens
-- **Real-time**: Socket.IO for live updates
+- **Authentication**: JWT + bcryptjs
+- **Real-time**: Socket.IO
+- **Caching**: Redis
+- **Validation**: Joi schemas
+- **Security**: Helmet, CORS, Rate limiting
+
+### **Infrastructure**
+- **Database**: PostgreSQL
+- **Caching**: Redis
+- **Image Service**: Custom SVG placeholder generation
+- **Development**: Docker Compose for local development
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- PostgreSQL
+- Redis
+- npm or yarn
+
+### 1. Clone Repository
+```bash
+git clone <repository-url>
+cd chop-now
+```
+
+### 2. Environment Setup
+
+#### Backend (.env)
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/chop_now_db"
+REDIS_URL="redis://localhost:6379"
+JWT_SECRET="your-super-secret-jwt-key-here"
+JWT_EXPIRES_IN="7d"
+NODE_ENV="development"
+PORT=5000
+```
+
+#### Frontend (.env.local)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+NEXT_PUBLIC_SOCKET_URL=http://localhost:5000
+```
+
+### 3. Database Setup
+```bash
+cd backend
+npm install
+npx prisma migrate reset --force
+npx prisma db seed
+```
+
+### 4. Start Services
+
+#### Start Backend
+```bash
+cd backend
+npm run dev
+```
+
+#### Start Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### 5. Access Application
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **API Documentation**: http://localhost:5000/api/docs
+
+## 👥 Demo Accounts
+
+### Restaurant Owners
+- **Nigerian**: mama@afrikas-kitchen.com / owner123
+- **Ethiopian**: owner@addis-red-sea.com / owner123
+- **Ghanaian**: owner@accra-gold.com / owner123
+- **Moroccan**: owner@sahara-spice.com / owner123
+- **Kenyan**: owner@nairobi-flavors.com / owner123
+- **South African**: owner@cape-town-braai.com / owner123
+
+### Other Roles
+- **Admin**: admin@chopnow.com / admin123
+- **Customer**: james.wilson@email.com / customer123
+- **Rider**: david.rider@delivery.com / rider123
 
 ## 📁 Project Structure
 
 ```
 chop-now/
-├── backend/                 # Node.js + Express API
+├── frontend/                 # Next.js frontend application
 │   ├── src/
-│   │   ├── controllers/     # Route controllers
-│   │   ├── routes/          # API routes
-│   │   ├── middleware/      # Custom middleware
-│   │   ├── services/        # Business logic
-│   │   ├── utils/           # Utility functions
-│   │   ├── types/           # TypeScript types
-│   │   └── index.ts         # Server entry point
-│   ├── prisma/
-│   │   ├── schema.prisma    # Database schema
-│   │   └── seed.ts          # Database seeding
+│   │   ├── app/             # App router pages
+│   │   ├── components/      # Reusable UI components
+│   │   ├── lib/            # Utilities and API client
+│   │   └── types/          # TypeScript type definitions
 │   └── package.json
-├── frontend/                # Next.js React application
+├── backend/                 # Express.js backend API
 │   ├── src/
-│   │   ├── app/             # Next.js 14 app directory
-│   │   │   ├── (customer)/  # Customer dashboard
-│   │   │   ├── (restaurant)/ # Restaurant dashboard
-│   │   │   ├── (rider)/     # Rider dashboard
-│   │   │   └── (admin)/     # Admin dashboard
-│   │   ├── components/      # Reusable components
-│   │   ├── lib/             # Utilities and configurations
-│   │   └── types/           # TypeScript types
+│   │   ├── routes/         # API route handlers
+│   │   ├── middleware/     # Custom middleware
+│   │   └── utils/          # Database and Redis utilities
+│   ├── prisma/             # Database schema and migrations
+│   │   ├── schema.prisma   # Prisma schema
+│   │   └── seed.ts         # Database seeding
 │   └── package.json
-└── docker-compose.yml       # Database services
+├── docker-compose.yml       # Local development services
+└── README.md               # This file
 ```
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-- Docker (for databases)
-
-### 1. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd chop-now
-```
-
-### 2. Start Database Services
-
-```bash
-# Start PostgreSQL and Redis
-docker-compose up -d
-
-# Verify services are running
-docker-compose ps
-```
-
-### 3. Backend Setup
-
-```bash
-cd backend
-
-# Install dependencies
-npm install
-
-# Copy environment file
-cp .env.example .env
-
-# Update .env with your database credentials:
-# DATABASE_URL="postgresql://postgres:postgres123@localhost:5432/chop_now_db?schema=public"
-
-# Generate Prisma client
-npm run db:generate
-
-# Push database schema
-npm run db:push
-
-# Seed the database with sample data
-npm run db:seed
-
-# Start development server
-npm run dev
-```
-
-The backend API will be available at `http://localhost:5000`
-
-### 4. Frontend Setup
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Copy environment file
-cp .env.local.example .env.local
-
-# Update .env.local:
-# NEXT_PUBLIC_API_URL=http://localhost:5000
-
-# Start development server
-npm run dev
-```
-
-The frontend will be available at `http://localhost:3000`
-
-## 🗄️ Database Schema
-
-### Core Models
-
-- **User**: Customer, Restaurant Owner, Rider, Admin accounts
-- **Restaurant**: Restaurant information and settings
-- **MenuItem**: Menu items for each restaurant
-- **Order**: Customer orders with status tracking
-- **OrderItem**: Individual items within an order
-- **Delivery**: Delivery tracking and rider assignment
-- **Payment**: Payment processing and status
-- **Review**: Customer reviews for restaurants
-
-### Sample Data
-
-After running `npm run db:seed`, you'll have these test accounts:
-
-- **Admin**: `admin@chopnow.com` / `admin123`
-- **Restaurant Owner**: `owner@restaurant.com` / `owner123`
-- **Customer**: `customer@example.com` / `customer123`
-- **Rider**: `rider@delivery.com` / `rider123`
-
-## 📡 API Endpoints
+## 🔧 API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - User registration
 - `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
 
 ### Restaurants
-- `GET /api/restaurants` - List restaurants
+- `GET /api/restaurants` - List restaurants with filtering
 - `GET /api/restaurants/:id` - Get restaurant details
-- `POST /api/restaurants` - Create restaurant (Owner)
-- `PUT /api/restaurants/:id` - Update restaurant (Owner)
+- `POST /api/restaurants` - Create restaurant (owner only)
+- `PUT /api/restaurants/:id` - Update restaurant (owner only)
 
-### Menu
+### Menu Items
 - `GET /api/menu/:restaurantId` - Get restaurant menu
-- `POST /api/menu` - Add menu item (Owner)
-- `PUT /api/menu/:id` - Update menu item (Owner)
-- `DELETE /api/menu/:id` - Delete menu item (Owner)
+- `POST /api/menu` - Add menu item (owner only)
+- `PUT /api/menu/:id` - Update menu item (owner only)
+- `DELETE /api/menu/:id` - Delete menu item (owner only)
 
 ### Orders
-- `GET /api/orders` - Get user orders
 - `POST /api/orders` - Create new order
-- `PUT /api/orders/:id` - Update order status
+- `GET /api/orders` - Get user orders
 - `GET /api/orders/:id` - Get order details
+- `PUT /api/orders/:id/status` - Update order status
 
-### Deliveries
-- `GET /api/deliveries` - Get deliveries (Rider)
-- `PUT /api/deliveries/:id` - Update delivery status (Rider)
+### Image Service
+- `GET /api/placeholder/:width/:height` - Generate placeholder image
+- `GET /api/food/:category` - Generate cuisine-specific placeholder
 
-## 🔧 Development Scripts
+## 🎯 Key Features Implementation
 
-### Backend
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run db:generate  # Generate Prisma client
-npm run db:push      # Push schema to database
-npm run db:migrate   # Create and run migrations
-npm run db:studio    # Open Prisma Studio
-npm run db:seed      # Seed database with sample data
-```
+### 🔍 **Location-Based Search**
+The platform uses the Haversine formula to calculate distances between user location and restaurants, enabling accurate delivery time estimates and location-based filtering.
 
-### Frontend
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-npm run type-check   # Run TypeScript checks
-```
+### 🔄 **Real-Time Updates**
+Socket.IO integration provides live order tracking, status updates, and real-time communication between customers, restaurants, and riders.
 
-## 🧪 Testing the Setup
+### 🛡️ **Security Features**
+- JWT-based authentication with refresh tokens
+- Password hashing with bcryptjs
+- Rate limiting to prevent abuse
+- Input validation with Joi schemas
+- Security headers with Helmet
 
-### 1. Health Check
-Visit `http://localhost:5000/health` - should return server status
+### 🎨 **Responsive Design**
+Mobile-first design approach with Tailwind CSS ensures optimal experience across all devices, from mobile phones to desktop computers.
 
-### 2. Database Connection
+## 🧪 Testing
+
+### Backend Testing
 ```bash
 cd backend
-npm run db:studio
+npm test
 ```
-Opens Prisma Studio at `http://localhost:5555`
 
-### 3. Frontend Connection
-Visit `http://localhost:3000` - should show the landing page
-
-### 4. API Test
+### Frontend Testing
 ```bash
-curl http://localhost:5000/api/restaurants
-```
-Should return restaurants list
-
-## 🐳 Docker Services
-
-Access the management interfaces:
-
-- **pgAdmin**: `http://localhost:5050`
-  - Email: `admin@chopnow.com`
-  - Password: `admin123`
-
-- **Redis Commander**: `http://localhost:8081`
-
-## 🔐 Environment Variables
-
-### Backend (.env)
-```env
-NODE_ENV=development
-PORT=5000
-DATABASE_URL="postgresql://postgres:postgres123@localhost:5432/chop_now_db?schema=public"
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your-super-secret-jwt-key
-FRONTEND_URL=http://localhost:3000
+cd frontend
+npm test
 ```
 
-### Frontend (.env.local)
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-NEXT_PUBLIC_SOCKET_URL=http://localhost:5000
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
+## 🚀 Deployment
 
-## 🚨 Troubleshooting
+### Production Environment Variables
+Ensure all environment variables are properly configured for production, including:
+- Secure JWT secrets
+- Production database URLs
+- CORS configuration
+- Rate limiting settings
 
-### Database Connection Issues
+### Docker Deployment
 ```bash
-# Check if PostgreSQL is running
-docker-compose ps
-
-# Reset database
-docker-compose down -v
 docker-compose up -d
-cd backend && npm run db:push && npm run db:seed
-```
-
-### Port Conflicts
-- Backend: Change `PORT` in `.env`
-- Frontend: Use `npm run dev -- -p 3001`
-- Database: Change ports in `docker-compose.yml`
-
-### Dependencies Issues
-```bash
-# Clean install
-rm -rf node_modules package-lock.json
-npm install
-```
-
-## 📦 Deployment
-
-### Backend (Production)
-```bash
-npm run build
-npm start
-```
-
-### Frontend (Production)
-```bash
-npm run build
-npm start
 ```
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## 📄 License
 
-MIT License - see LICENSE file for details.
+This project is licensed under the MIT License.
 
-## 📞 Support
+## 🙏 Acknowledgments
 
-For questions or issues:
-- Create an issue on GitHub
-- Check the troubleshooting section
-- Review the API documentation
+- African cuisine inspiration from authentic restaurants
+- Community feedback and testing
+- Open source libraries and frameworks used
 
 ---
 
-**Happy Coding! 🎉**
+**ChopNow** - Bringing the authentic taste of Africa to your doorstep! 🌍🍽️

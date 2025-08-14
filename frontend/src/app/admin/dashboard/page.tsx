@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import StatCard from '@/components/dashboard/StatCard';
-import { 
-  UsersIcon, 
+import { useState } from "react";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import StatCard from "@/components/dashboard/StatCard";
+import {
+  UsersIcon,
   BuildingStorefrontIcon,
   TruckIcon,
   ShoppingBagIcon,
@@ -14,8 +14,8 @@ import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
-  EyeIcon
-} from '@heroicons/react/24/outline';
+  EyeIcon,
+} from "@heroicons/react/24/outline";
 
 interface Restaurant {
   id: string;
@@ -23,7 +23,7 @@ interface Restaurant {
   email: string;
   phone: string;
   address: string;
-  status: 'active' | 'inactive' | 'pending';
+  status: "active" | "inactive" | "pending";
   totalOrders: number;
   rating: number;
   joinedAt: string;
@@ -34,13 +34,13 @@ interface User {
   name: string;
   email: string;
   phone: string;
-  role: 'CUSTOMER' | 'RESTAURANT_OWNER' | 'RIDER' | 'ADMIN';
-  status: 'active' | 'inactive';
+  role: "CUSTOMER" | "RESTAURANT_OWNER" | "RIDER" | "ADMIN";
+  status: "active" | "inactive";
   joinedAt: string;
 }
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [showAddRestaurant, setShowAddRestaurant] = useState(false);
 
   // Mock data - replace with actual API calls
@@ -50,71 +50,71 @@ export default function AdminDashboard() {
     totalRiders: 45,
     totalOrders: 5678,
     monthlyRevenue: 125000,
-    activeOrders: 23
+    activeOrders: 23,
   };
 
   const restaurants: Restaurant[] = [
     {
-      id: '1',
-      name: 'Pizza Palace',
-      email: 'contact@pizzapalace.com',
-      phone: '+1234567890',
-      address: '123 Main St, City',
-      status: 'active',
+      id: "1",
+      name: "Pizza Palace",
+      email: "contact@pizzapalace.com",
+      phone: "+1234567890",
+      address: "123 Main St, City",
+      status: "active",
       totalOrders: 234,
       rating: 4.5,
-      joinedAt: '2024-01-15'
+      joinedAt: "2024-01-15",
     },
     {
-      id: '2',
-      name: 'Burger Barn',
-      email: 'info@burgerbarn.com',
-      phone: '+1234567891',
-      address: '456 Oak Ave, City',
-      status: 'active',
+      id: "2",
+      name: "Burger Barn",
+      email: "info@burgerbarn.com",
+      phone: "+1234567891",
+      address: "456 Oak Ave, City",
+      status: "active",
       totalOrders: 189,
       rating: 4.2,
-      joinedAt: '2024-02-10'
+      joinedAt: "2024-02-10",
     },
     {
-      id: '3',
-      name: 'Sushi Spot',
-      email: 'hello@sushispot.com',
-      phone: '+1234567892',
-      address: '789 Pine St, City',
-      status: 'pending',
+      id: "3",
+      name: "Sushi Spot",
+      email: "hello@sushispot.com",
+      phone: "+1234567892",
+      address: "789 Pine St, City",
+      status: "pending",
       totalOrders: 0,
       rating: 0,
-      joinedAt: '2024-08-01'
-    }
+      joinedAt: "2024-08-01",
+    },
   ];
 
   const users: User[] = [
     {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      phone: '+1234567893',
-      role: 'CUSTOMER',
-      status: 'active',
-      joinedAt: '2024-03-15'
+      id: "1",
+      name: "John Doe",
+      email: "john@example.com",
+      phone: "+1234567893",
+      role: "CUSTOMER",
+      status: "active",
+      joinedAt: "2024-03-15",
     },
     {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      phone: '+1234567894',
-      role: 'RIDER',
-      status: 'active',
-      joinedAt: '2024-04-20'
-    }
+      id: "2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      phone: "+1234567894",
+      role: "RIDER",
+      status: "active",
+      joinedAt: "2024-04-20",
+    },
   ];
 
   const tabButtons = [
-    { id: 'overview', name: 'Overview', icon: ChartBarIcon },
-    { id: 'restaurants', name: 'Restaurants', icon: BuildingStorefrontIcon },
-    { id: 'users', name: 'Users', icon: UsersIcon },
-    { id: 'orders', name: 'Orders', icon: ShoppingBagIcon }
+    { id: "overview", name: "Overview", icon: ChartBarIcon },
+    { id: "restaurants", name: "Restaurants", icon: BuildingStorefrontIcon },
+    { id: "users", name: "Users", icon: UsersIcon },
+    { id: "orders", name: "Orders", icon: ShoppingBagIcon },
   ];
 
   const renderOverview = () => (
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
           change="12% from last month"
           changeType="increase"
           icon={<UsersIcon className="h-6 w-6" />}
-          color="blue"
+          color="orange"
         />
         <StatCard
           title="Restaurants"
@@ -135,7 +135,7 @@ export default function AdminDashboard() {
           change="3 new this month"
           changeType="increase"
           icon={<BuildingStorefrontIcon className="h-6 w-6" />}
-          color="green"
+          color="amber"
         />
         <StatCard
           title="Active Riders"
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
           change="5 new this month"
           changeType="increase"
           icon={<TruckIcon className="h-6 w-6" />}
-          color="purple"
+          color="orange"
         />
         <StatCard
           title="Total Orders"
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
           change="18% from last month"
           changeType="increase"
           icon={<ShoppingBagIcon className="h-6 w-6" />}
-          color="yellow"
+          color="amber"
         />
         <StatCard
           title="Monthly Revenue"
@@ -165,14 +165,16 @@ export default function AdminDashboard() {
           title="Active Orders"
           value={stats.activeOrders}
           icon={<ShoppingBagIcon className="h-6 w-6" />}
-          color="red"
+          color="orange"
         />
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">Recent Activity</h3>
+      <div className="bg-white rounded-lg shadow-sm border border-orange-100">
+        <div className="px-6 py-4 border-b border-orange-100">
+          <h3 className="text-lg font-medium text-orange-800">
+            Recent Activity
+          </h3>
         </div>
         <div className="p-6">
           <div className="flow-root">
@@ -180,16 +182,20 @@ export default function AdminDashboard() {
               <li className="relative pb-8">
                 <div className="relative flex space-x-3">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center">
                       <PlusIcon className="h-5 w-5 text-white" />
                     </div>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div>
-                      <p className="text-sm text-gray-500">
-                        New restaurant <span className="font-medium text-gray-900">Sushi Spot</span> joined
+                      <p className="text-sm text-orange-600">
+                        New restaurant{" "}
+                        <span className="font-medium text-orange-800">
+                          Sushi Spot
+                        </span>{" "}
+                        joined
                       </p>
-                      <p className="text-xs text-gray-400">2 hours ago</p>
+                      <p className="text-xs text-orange-400">2 hours ago</p>
                     </div>
                   </div>
                 </div>
@@ -197,16 +203,16 @@ export default function AdminDashboard() {
               <li className="relative pb-8">
                 <div className="relative flex space-x-3">
                   <div className="flex-shrink-0">
-                    <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center">
                       <UsersIcon className="h-5 w-5 text-white" />
                     </div>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-orange-600">
                         5 new customers registered today
                       </p>
-                      <p className="text-xs text-gray-400">4 hours ago</p>
+                      <p className="text-xs text-orange-400">4 hours ago</p>
                     </div>
                   </div>
                 </div>
@@ -221,7 +227,9 @@ export default function AdminDashboard() {
   const renderRestaurants = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-gray-900">Restaurant Management</h2>
+        <h2 className="text-xl font-semibold text-gray-900">
+          Restaurant Management
+        </h2>
         <button
           onClick={() => setShowAddRestaurant(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
@@ -246,24 +254,34 @@ export default function AdminDashboard() {
                         <p className="text-sm font-medium text-indigo-600 truncate">
                           {restaurant.name}
                         </p>
-                        <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          restaurant.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : restaurant.status === 'pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            restaurant.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : restaurant.status === "pending"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-red-100 text-red-800"
+                          }`}
+                        >
                           {restaurant.status}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-500">{restaurant.email}</p>
-                      <p className="text-sm text-gray-500">{restaurant.address}</p>
+                      <p className="text-sm text-gray-500">
+                        {restaurant.email}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {restaurant.address}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="text-right">
-                      <p className="text-sm text-gray-900">{restaurant.totalOrders} orders</p>
-                      <p className="text-sm text-gray-500">★ {restaurant.rating}/5</p>
+                      <p className="text-sm text-gray-900">
+                        {restaurant.totalOrders} orders
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        ★ {restaurant.rating}/5
+                      </p>
                     </div>
                     <div className="flex space-x-2">
                       <button className="text-indigo-600 hover:text-indigo-900">
@@ -304,18 +322,22 @@ export default function AdminDashboard() {
                         <p className="text-sm font-medium text-indigo-600 truncate">
                           {user.name}
                         </p>
-                        <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          user.role === 'CUSTOMER' 
-                            ? 'bg-blue-100 text-blue-800'
-                            : user.role === 'RIDER'
-                            ? 'bg-purple-100 text-purple-800'
-                            : 'bg-green-100 text-green-800'
-                        }`}>
-                          {user.role.replace('_', ' ')}
+                        <span
+                          className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            user.role === "CUSTOMER"
+                              ? "bg-blue-100 text-blue-800"
+                              : user.role === "RIDER"
+                                ? "bg-purple-100 text-purple-800"
+                                : "bg-green-100 text-green-800"
+                          }`}
+                        >
+                          {user.role.replace("_", " ")}
                         </span>
                       </div>
                       <p className="text-sm text-gray-500">{user.email}</p>
-                      <p className="text-sm text-gray-500">Joined: {new Date(user.joinedAt).toLocaleDateString()}</p>
+                      <p className="text-sm text-gray-500">
+                        Joined: {new Date(user.joinedAt).toLocaleDateString()}
+                      </p>
                     </div>
                   </div>
                   <div className="flex space-x-2">
@@ -342,13 +364,15 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-gray-900">Order Management</h2>
       <div className="bg-white rounded-lg shadow p-6">
-        <p className="text-gray-600">Order management interface coming soon...</p>
+        <p className="text-gray-600">
+          Order management interface coming soon...
+        </p>
       </div>
     </div>
   );
 
   return (
-    <ProtectedRoute requiredRoles={['ADMIN']}>
+    <ProtectedRoute requiredRoles={["ADMIN"]}>
       <DashboardLayout title="Admin Dashboard">
         {/* Tab Navigation */}
         <div className="border-b border-gray-200 mb-6">
@@ -361,8 +385,8 @@ export default function AdminDashboard() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? 'border-indigo-500 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? "border-indigo-500 text-indigo-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`}
                 >
                   <Icon className="h-5 w-5 mr-2" />
@@ -374,10 +398,10 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'overview' && renderOverview()}
-        {activeTab === 'restaurants' && renderRestaurants()}
-        {activeTab === 'users' && renderUsers()}
-        {activeTab === 'orders' && renderOrders()}
+        {activeTab === "overview" && renderOverview()}
+        {activeTab === "restaurants" && renderRestaurants()}
+        {activeTab === "users" && renderUsers()}
+        {activeTab === "orders" && renderOrders()}
       </DashboardLayout>
     </ProtectedRoute>
   );
